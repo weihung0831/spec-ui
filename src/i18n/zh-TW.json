@@ -1,0 +1,105 @@
+{
+  "sidebar": {
+    "workspace": "工作區",
+    "search": "搜尋",
+    "fileTree": "檔案樹",
+    "refreshFileTree": "重新整理檔案樹",
+    "expandSidebar": "展開側邊欄",
+    "collapseSidebar": "收合側邊欄"
+  },
+  "fileTree": {
+    "addProject": "+ 新增專案",
+    "noProjectSelected": "尚未選擇專案",
+    "addProjectToStart": "新增專案以開始使用",
+    "noFilesFound": "此專案中找不到任何檔案。",
+    "selectProjectFolder": "選擇專案資料夾"
+  },
+  "contextMenu": {
+    "expandAll": "全部展開",
+    "collapseAll": "全部收合",
+    "showInFinder": "在 Finder 中顯示",
+    "open": "開啟",
+    "copyPath": "複製路徑",
+    "delete": "刪除"
+  },
+  "editor": {
+    "selectFile": "從側邊欄選擇檔案以在此檢視。",
+    "unsavedChanges": "未儲存的變更",
+    "saveFile": "儲存檔案",
+    "saveShortcut": "儲存 (⌘S)",
+    "editorOnly": "僅編輯器",
+    "splitView": "分割檢視",
+    "previewOnly": "僅預覽",
+    "dragToResize": "拖曳以調整大小"
+  },
+  "search": {
+    "searchFiles": "搜尋檔案...",
+    "clearSearch": "清除搜尋",
+    "result": "{{count}} 個結果",
+    "result_other": "{{count}} 個結果",
+    "noResults": "找不到「{{query}}」的搜尋結果"
+  },
+  "coverage": {
+    "scanCoverage": "掃描覆蓋率",
+    "scanning": "掃描中...",
+    "scanningCoverage": "正在掃描覆蓋率...",
+    "scanTooltip": "使用 Claude 掃描規格覆蓋率",
+    "selectCodeDir": "選擇要掃描的程式碼目錄",
+    "cliNotInstalled": "Claude CLI 未安裝或不在 PATH 中。\n\n請從 https://claude.ai/code 安裝\n然後重新啟動應用程式。",
+    "cliCheckFailed": "無法檢查 Claude CLI，請確認應用程式後端正在執行。",
+    "coverage": "覆蓋率：",
+    "lastScanned": "最後掃描：{{time}}",
+    "implemented": "已實作",
+    "partial": "部分實作",
+    "notImplemented": "未實作",
+    "unknown": "未知",
+    "file": "{{count}} 個檔案",
+    "file_other": "{{count}} 個檔案",
+    "markImplemented": "標記為已實作",
+    "markNotImplemented": "標記為未實作",
+    "resetToAuto": "重設為自動",
+    "manualOverride": "手動覆寫",
+    "manual": "手動",
+    "badgeTitle": "覆蓋率：{{status}} ({{confidence}}%)",
+    "badgeTitleOverride": "覆蓋率：{{status}} ({{confidence}}%) [手動覆寫]",
+    "badgeAriaLabel": "覆蓋率狀態：{{status}}，信心度：{{confidence}}%"
+  },
+  "frontmatter": {
+    "frontmatter": "前置資料",
+    "expandFrontmatter": "展開前置資料",
+    "collapseFrontmatter": "收合前置資料",
+    "effort": "工作量："
+  },
+  "theme": {
+    "lightMode": "淺色模式",
+    "darkMode": "深色模式",
+    "switchToLight": "切換至淺色模式",
+    "switchToDark": "切換至深色模式"
+  },
+  "settings": {
+    "title": "設定",
+    "appearance": "外觀",
+    "theme": "主題",
+    "themeDescription": "選擇您的配色方案",
+    "light": "淺色",
+    "dark": "深色",
+    "system": "跟隨系統",
+    "editorFontSize": "編輯器字型大小",
+    "fontSizeCurrent": "目前：{{size}}px",
+    "autoSave": "自動儲存",
+    "autoSaveDescription": "變更時自動儲存",
+    "on": "開啟",
+    "off": "關閉",
+    "keyboardShortcuts": "鍵盤快捷鍵",
+    "appVersion": "Spec UI — 版本 0.0.0",
+    "language": "語言",
+    "languageDescription": "選擇您的顯示語言"
+  },
+  "shortcuts": {
+    "saveFile": "儲存檔案",
+    "cyclePreview": "切換預覽模式",
+    "toggleSidebar": "切換側邊欄",
+    "closeTab": "關閉目前分頁",
+    "focusSearch": "聚焦搜尋"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "sidebar": {
+    "workspace": "Workspace",
+    "search": "Search",
+    "fileTree": "File tree",
+    "refreshFileTree": "Refresh file tree",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar"
+  },
+  "fileTree": {
+    "addProject": "+ Add Project",
+    "noProjectSelected": "No project selected",
+    "addProjectToStart": "Add a project to get started",
+    "noFilesFound": "No files found in this project.",
+    "selectProjectFolder": "Select project folder"
+  },
+  "contextMenu": {
+    "expandAll": "Expand All",
+    "collapseAll": "Collapse All",
+    "showInFinder": "Show in Finder",
+    "open": "Open",
+    "copyPath": "Copy Path",
+    "delete": "Delete"
+  },
+  "editor": {
+    "selectFile": "Select a file from the sidebar to view it here.",
+    "unsavedChanges": "Unsaved changes",
+    "saveFile": "Save file",
+    "saveShortcut": "Save (⌘S)",
+    "editorOnly": "Editor only",
+    "splitView": "Split view",
+    "previewOnly": "Preview only",
+    "dragToResize": "Drag to resize"
+  },
+  "search": {
+    "searchFiles": "Search files...",
+    "clearSearch": "Clear search",
+    "result": "{{count}} result",
+    "result_other": "{{count}} results",
+    "noResults": "No results found for \"{{query}}\""
+  },
+  "coverage": {
+    "scanCoverage": "Scan Coverage",
+    "scanning": "Scanning...",
+    "scanningCoverage": "Scanning coverage...",
+    "scanTooltip": "Scan spec coverage with Claude",
+    "selectCodeDir": "Select Code Directory to Scan",
+    "cliNotInstalled": "Claude CLI is not installed or not found in PATH.\n\nInstall it from: https://claude.ai/code\nThen restart the app.",
+    "cliCheckFailed": "Unable to check Claude CLI. Make sure the app backend is running.",
+    "coverage": "Coverage:",
+    "lastScanned": "Last scanned: {{time}}",
+    "implemented": "Implemented",
+    "partial": "Partial",
+    "notImplemented": "Not Implemented",
+    "unknown": "Unknown",
+    "file": "{{count}} file",
+    "file_other": "{{count}} files",
+    "markImplemented": "Mark as Implemented",
+    "markNotImplemented": "Mark as Not Implemented",
+    "resetToAuto": "Reset to Auto",
+    "manualOverride": "manual override",
+    "manual": "manual",
+    "badgeTitle": "Coverage: {{status}} ({{confidence}}%)",
+    "badgeTitleOverride": "Coverage: {{status}} ({{confidence}}%) [manual override]",
+    "badgeAriaLabel": "Coverage status: {{status}}, confidence: {{confidence}}%"
+  },
+  "frontmatter": {
+    "frontmatter": "Frontmatter",
+    "expandFrontmatter": "Expand frontmatter",
+    "collapseFrontmatter": "Collapse frontmatter",
+    "effort": "Effort:"
+  },
+  "theme": {
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themeDescription": "Choose your colour scheme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "editorFontSize": "Editor Font Size",
+    "fontSizeCurrent": "Current: {{size}}px",
+    "autoSave": "Auto Save",
+    "autoSaveDescription": "Automatically save on changes",
+    "on": "On",
+    "off": "Off",
+    "keyboardShortcuts": "Keyboard Shortcuts",
+    "appVersion": "Spec UI — version 0.0.0",
+    "language": "Language",
+    "languageDescription": "Choose your display language"
+  },
+  "shortcuts": {
+    "saveFile": "Save file",
+    "cyclePreview": "Cycle preview mode",
+    "toggleSidebar": "Toggle sidebar",
+    "closeTab": "Close current tab",
+    "focusSearch": "Focus search"
+  }
+}
