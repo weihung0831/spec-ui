@@ -91,7 +91,7 @@
     "on": "開啟",
     "off": "關閉",
     "keyboardShortcuts": "鍵盤快捷鍵",
-    "appVersion": "Spec UI — 版本 0.0.0",
+    "appVersion": "Spec UI — 版本 {{version}}",
     "language": "語言",
     "languageDescription": "選擇您的顯示語言"
   },

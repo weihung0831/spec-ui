@@ -91,7 +91,7 @@
     "on": "On",
     "off": "Off",
     "keyboardShortcuts": "Keyboard Shortcuts",
-    "appVersion": "Spec UI — version 0.0.0",
+    "appVersion": "Spec UI — version {{version}}",
     "language": "Language",
     "languageDescription": "Choose your display language"
   },

@@ -13,6 +13,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { useSettingsStore } from "@/stores/settings-store"
 import { useTheme } from "@/hooks/use-theme"
+import { version as APP_VERSION } from "../../package.json"
 import { SHORTCUT_REGISTRY } from "@/hooks/use-keyboard-shortcuts"
 import type { Theme } from "@/stores/settings-store"
 import type { Language } from "@/i18n"
@@ -39,7 +40,7 @@ function SettingsPage() {
   const setLanguage = useSettingsStore((s) => s.setLanguage)
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-8 max-w-2xl mx-auto w-full">
+    <div className="flex flex-1 flex-col gap-4 p-8 max-w-2xl mx-auto w-full overflow-y-auto">
       {/* Header */}
       <div className="flex items-center gap-2">
         <Settings className="size-5" />
@@ -184,7 +185,7 @@ function SettingsPage() {
       <Card>
         <CardContent className="py-3">
           <p className="text-xs text-muted-foreground">
-            {t("settings.appVersion")}
+            {t("settings.appVersion", { version: APP_VERSION })}
           </p>
         </CardContent>
       </Card>
