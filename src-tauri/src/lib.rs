@@ -1,0 +1,43 @@
+mod commands;
+mod errors;
+mod models;
+
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
+    tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_fs::init())
+        .setup(|app| {
+            if cfg!(debug_assertions) {
+                app.handle().plugin(
+                    tauri_plugin_log::Builder::default()
+                        .level(log::LevelFilter::Info)
+                        .build(),
+                )?;
+            }
+            Ok(())
+        })
+        .invoke_handler(tauri::generate_handler![
+            commands::file_operations::read_file,
+            commands::file_operations::write_file,
+            commands::file_operations::list_directory,
+            commands::file_operations::get_file_metadata,
+            commands::file_operations::open_in_editor,
+            commands::frontmatter::parse_frontmatter,
+            commands::frontmatter::update_frontmatter,
+            commands::app_settings::read_app_settings,
+            commands::app_settings::write_app_settings,
+            commands::search::search_files,
+            commands::watcher::start_watching,
+            commands::watcher::stop_watching,
+            commands::coverage::extract_requirements,
+            commands::coverage::check_claude_cli,
+            commands::coverage::analyze_coverage,
+            commands::coverage::read_coverage_cache,
+            commands::coverage::write_coverage_cache,
+            commands::coverage::get_changed_files,
+            commands::coverage::save_coverage_override,
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
