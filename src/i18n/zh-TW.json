@@ -95,6 +95,19 @@
     "language": "語言",
     "languageDescription": "選擇您的顯示語言"
   },
+  "updater": {
+    "title": "軟體更新",
+    "description": "檢查是否有新版本可用",
+    "checkButton": "檢查更新",
+    "checking": "正在檢查更新...",
+    "upToDate": "已是最新版本",
+    "available": "有新版本 {{version}} 可用",
+    "downloadButton": "下載並安裝",
+    "downloading": "下載中... {{progress}}%",
+    "ready": "更新已就緒，重新啟動以套用",
+    "relaunchButton": "重新啟動",
+    "error": "檢查更新失敗"
+  },
   "shortcuts": {
     "saveFile": "儲存檔案",
     "cyclePreview": "切換預覽模式",

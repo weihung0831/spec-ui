@@ -95,6 +95,19 @@
     "language": "Language",
     "languageDescription": "Choose your display language"
   },
+  "updater": {
+    "title": "Software Update",
+    "description": "Check if a new version is available",
+    "checkButton": "Check for Updates",
+    "checking": "Checking for updates...",
+    "upToDate": "You're up to date",
+    "available": "Version {{version}} is available",
+    "downloadButton": "Download & Install",
+    "downloading": "Downloading... {{progress}}%",
+    "ready": "Update ready — restart to apply",
+    "relaunchButton": "Restart Now",
+    "error": "Failed to check for updates"
+  },
   "shortcuts": {
     "saveFile": "Save file",
     "cyclePreview": "Cycle preview mode",

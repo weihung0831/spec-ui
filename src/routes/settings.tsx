@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Settings, Keyboard, Monitor, Globe, X } from "lucide-react"
+import { Settings, Keyboard, Monitor, Globe, X, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -17,6 +17,7 @@ import { version as APP_VERSION } from "../../package.json"
 import { SHORTCUT_REGISTRY } from "@/hooks/use-keyboard-shortcuts"
 import type { Theme } from "@/stores/settings-store"
 import type { Language } from "@/i18n"
+import { UpdateChecker } from "@/components/updater/update-checker"
 
 /** Language display names */
 const LANGUAGE_OPTIONS: { value: Language; label: string }[] = [
@@ -178,6 +179,19 @@ function SettingsPage() {
               </div>
             </div>
           ))}
+        </CardContent>
+      </Card>
+
+      {/* Update */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm font-medium">
+            <Download className="size-4" />
+            {t("updater.title")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <UpdateChecker />
         </CardContent>
       </Card>
 
