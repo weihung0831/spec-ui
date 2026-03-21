@@ -9,31 +9,59 @@ interface ChangelogData {
   body: string
 }
 
-const STORAGE_KEY = "pending-changelog"
+const VERSION_KEY = "last-known-version"
+const PENDING_KEY = "pending-changelog"
 
 /**
- * Dialog shown after app restarts following an update.
- * Reads pending changelog from localStorage, displays it once,
- * then clears the storage entry.
+ * Extracts the localized section from release notes.
+ * Format: English section first, then "---", then Chinese section.
+ * Falls back to full text if no separator found.
+ */
+function getLocalizedNotes(notes: string, lang: string): string {
+  const parts = notes.split(/\n---\n/)
+  if (parts.length < 2) return notes
+  return lang.startsWith("zh") ? parts[1].trim() : parts[0].trim()
+}
+
+/**
+ * Dialog shown after app version changes (i.e. after an update).
+ * Priority: reads pending-changelog from localStorage (saved by UpdateNotification
+ * before relaunch). Falls back to version comparison via last-known-version.
  */
 export function PostUpdateChangelog() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [data, setData] = useState<ChangelogData | null>(null)
 
   useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return
+    const detect = async () => {
+      const currentVersion = await getVersion()
+      const lastVersion = localStorage.getItem(VERSION_KEY)
 
-    const parsed: ChangelogData = JSON.parse(raw)
+      // Always update stored version
+      localStorage.setItem(VERSION_KEY, currentVersion)
 
-    // Only show if current app version matches the updated version
-    getVersion().then((currentVersion) => {
-      if (currentVersion === parsed.version) {
-        setData(parsed)
+      // Check for pending changelog saved by UpdateNotification before relaunch
+      const pending = localStorage.getItem(PENDING_KEY)
+      if (pending) {
+        localStorage.removeItem(PENDING_KEY)
+        try {
+          const parsed = JSON.parse(pending) as ChangelogData
+          if (parsed.version === currentVersion) {
+            const body = getLocalizedNotes(parsed.body, i18n.language)
+            setData({ version: currentVersion, body })
+            return
+          }
+        } catch { /* ignore parse errors */ }
       }
-      // Always clear — stale entries should not persist
-      localStorage.removeItem(STORAGE_KEY)
-    })
+
+      // Fallback: detect version change without pending data
+      if (lastVersion && lastVersion !== currentVersion) {
+        setData({ version: currentVersion, body: "" })
+      }
+    }
+
+    const timer = setTimeout(detect, 1000)
+    return () => clearTimeout(timer)
   }, [])
 
   if (!data) return null

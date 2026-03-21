@@ -54,7 +54,7 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: 'Spec Plan Manager ${{ github.ref_name }}'
-          releaseBody: '請在下方選擇適合您平台的安裝檔下載。'
+          releaseBody: 'Release notes will be added manually before publishing.'
           releaseDraft: true
           prerelease: false
           includeUpdaterJson: true

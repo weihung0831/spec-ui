@@ -21,6 +21,11 @@ export function UpdateNotification({ info, onDismiss }: { info: UpdateInfo; onDi
   async function handleDownload() {
     setStatus("downloading")
     setProgress(0)
+    // Save release notes before install so post-update dialog can show them
+    localStorage.setItem("pending-changelog", JSON.stringify({
+      version: info.version,
+      body: info.body,
+    }))
     try {
       let totalBytes = 0
       let downloadedBytes = 0
@@ -45,11 +50,6 @@ export function UpdateNotification({ info, onDismiss }: { info: UpdateInfo; onDi
 
   async function handleRelaunch() {
     try {
-      // Persist changelog so it can be shown after restart
-      localStorage.setItem("pending-changelog", JSON.stringify({
-        version: info.version,
-        body: info.body,
-      }))
       await relaunch()
     } catch {
       setStatus("error")
