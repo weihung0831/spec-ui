@@ -4,6 +4,8 @@ import { ContentArea } from "@/components/layout/content-area"
 import { ResizableHandle } from "@/components/layout/resizable-panel"
 import { useWorkspacePersistence } from "@/hooks/use-workspace-persistence"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { useAutoUpdateCheck } from "@/hooks/use-auto-update-check"
+import { UpdateNotification } from "@/components/updater/update-notification"
 
 const COLLAPSED_WIDTH = 40
 
@@ -18,6 +20,7 @@ export function AppLayout() {
   const sidebarWidth = useWorkspaceStore((s) => s.sidebarWidth)
   const sidebarCollapsed = useWorkspaceStore((s) => s.sidebarCollapsed)
   const setSidebarWidth = useWorkspaceStore((s) => s.setSidebarWidth)
+  const { updateInfo, dismiss } = useAutoUpdateCheck()
 
   const effectiveWidth = sidebarCollapsed ? COLLAPSED_WIDTH : sidebarWidth
 
@@ -41,6 +44,9 @@ export function AppLayout() {
 
       {/* Content area */}
       <ContentArea />
+
+      {/* Auto update notification */}
+      {updateInfo && <UpdateNotification info={updateInfo} onDismiss={dismiss} />}
     </div>
     </TooltipProvider>
   )

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,7 +14,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { useSettingsStore } from "@/stores/settings-store"
 import { useTheme } from "@/hooks/use-theme"
-import { version as APP_VERSION } from "../../package.json"
+import { getVersion } from "@tauri-apps/api/app"
 import { SHORTCUT_REGISTRY } from "@/hooks/use-keyboard-shortcuts"
 import type { Theme } from "@/stores/settings-store"
 import type { Language } from "@/i18n"
@@ -33,6 +34,11 @@ function SettingsPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
+  const [appVersion, setAppVersion] = useState("")
+
+  useEffect(() => {
+    getVersion().then(setAppVersion)
+  }, [])
   const fontSize = useSettingsStore((s) => s.fontSize)
   const setFontSize = useSettingsStore((s) => s.setFontSize)
   const autoSaveEnabled = useSettingsStore((s) => s.autoSaveEnabled)
@@ -199,7 +205,7 @@ function SettingsPage() {
       <Card>
         <CardContent className="py-3">
           <p className="text-xs text-muted-foreground">
-            {t("settings.appVersion", { version: APP_VERSION })}
+            {t("settings.appVersion", { version: appVersion })}
           </p>
         </CardContent>
       </Card>
