@@ -1,6 +1,6 @@
 [package]
 name = "spec-plan-manager"
-version = "0.2.3"
+version = "0.2.4"
 description = "Desktop app for managing markdown spec/plan files"
 authors = ["weihung"]
 license = ""
