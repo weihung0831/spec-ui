@@ -66,6 +66,14 @@ A desktop app for authoring and managing markdown specification and plan files, 
 - Auto-save toggle / 自動儲存開關
 - Keyboard shortcuts reference / 鍵盤快捷鍵參考
 
+### Auto Update / 自動更新
+- In-app update checker via Tauri updater plugin
+  透過 Tauri updater 插件的應用程式內更新檢查
+- Download progress indicator with release notes display
+  下載進度指示器與版本說明顯示
+- One-click download, install, and relaunch
+  一鍵下載、安裝與重新啟動
+
 ## Tech Stack / 技術堆疊
 
 | Layer / 層級 | Technology / 技術                       |
@@ -78,6 +86,8 @@ A desktop app for authoring and managing markdown specification and plan files, 
 | UI           | Radix UI, Lucide Icons                  |
 | Backend      | Rust (Tauri 2)                          |
 | Markdown     | unified / remark / rehype               |
+| Diagrams     | Mermaid 11                              |
+| Build/CI     | GitHub Actions (multi-platform release) |
 
 ## Development / 開發
 
@@ -116,6 +126,19 @@ npm run tauri build
 
 Produces a platform-native installer (`.dmg` on macOS, `.msi` on Windows).
 產出平台原生安裝檔（macOS 為 `.dmg`，Windows 為 `.msi`）。
+
+## Release / 發布
+
+Push a version tag to trigger the GitHub Actions release workflow:
+推送版本標籤以觸發 GitHub Actions 發布流程：
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+The workflow builds for macOS (aarch64 + x86_64) and Windows, then creates a draft GitHub Release with updater artifacts.
+流程會建置 macOS（aarch64 + x86_64）與 Windows 版本，並建立包含更新器產物的 GitHub Release 草稿。
 
 ## License / 授權
 
