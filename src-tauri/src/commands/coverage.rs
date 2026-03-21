@@ -10,6 +10,7 @@ use crate::models::coverage::{
     CodeMatch, CoverageCache, CoverageOverride, CoverageReport, CoverageResult,
     CoverageSummary, CoverageStatus, RequirementInfo,
 };
+use crate::process_utils::{create_command, which_command};
 
 // ---------------------------------------------------------------------------
 // ClaudeCliInfo
@@ -31,13 +32,9 @@ pub struct ClaudeCliInfo {
 /// Detects whether the `claude` CLI is installed and returns its path + version.
 #[tauri::command]
 pub async fn check_claude_cli() -> Result<ClaudeCliInfo, String> {
-    // Determine the correct "which" command per platform
-    #[cfg(target_os = "windows")]
-    let which_cmd = "where";
-    #[cfg(not(target_os = "windows"))]
-    let which_cmd = "which";
+    let which_cmd = which_command();
 
-    let which_output = tokio::process::Command::new(which_cmd)
+    let which_output = create_command(which_cmd)
         .arg("claude")
         .output()
         .await
@@ -56,7 +53,7 @@ pub async fn check_claude_cli() -> Result<ClaudeCliInfo, String> {
         .to_string();
 
     // Attempt to get the version; non-fatal if this fails
-    let version = match tokio::process::Command::new("claude")
+    let version = match create_command("claude")
         .arg("--version")
         .output()
         .await
@@ -116,7 +113,7 @@ pub async fn analyze_coverage(
     let prompt = build_analysis_prompt(&code_path, &requirements_json);
 
     // 5. Spawn claude CLI with 120s timeout
-    let child_future = tokio::process::Command::new("claude")
+    let child_future = create_command("claude")
         .args([
             "--print",
             "--output-format",
@@ -390,6 +387,11 @@ fn parse_requirements(content: &str) -> Vec<RequirementInfo> {
                     break;
                 }
 
+                // Stop at checkbox lines so they get parsed independently
+                if parse_checkbox(trimmed).is_some() {
+                    break;
+                }
+
                 // Detect `### Scenario:` block and gather GIVEN/WHEN/THEN
                 if trimmed.starts_with("### Scenario:") || trimmed.starts_with("###Scenario:") {
                     let scenario_text = collect_scenario_block(&lines, j, total);
@@ -478,6 +480,13 @@ fn parse_openspec_heading(line: &str) -> Option<String> {
     if name.is_empty() {
         return Some(heading_text.to_string());
     }
+    // Strip known prefixes like "Requirement:", "Task:", "Step:"
+    let name = name
+        .strip_prefix("Requirement:")
+        .or_else(|| name.strip_prefix("Task:"))
+        .or_else(|| name.strip_prefix("Step:"))
+        .map(|s| s.trim())
+        .unwrap_or(name);
     Some(name.to_string())
 }
 
@@ -553,7 +562,7 @@ pub async fn get_changed_files(
     code_path: String,
     since_commit: String,
 ) -> Result<Vec<String>, String> {
-    let output = tokio::process::Command::new("git")
+    let output = create_command("git")
         .args(["diff", "--name-only", &format!("{}..HEAD", since_commit)])
         .current_dir(&code_path)
         .output()

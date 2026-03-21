@@ -2,6 +2,7 @@ use std::path::Path;
 use std::time::UNIX_EPOCH;
 
 use crate::models::FileNode;
+use crate::process_utils::{create_command, which_command};
 
 /// Reads UTF-8 content from a file at the given path.
 /// Returns the file content as a string or an error message.
@@ -71,17 +72,17 @@ pub async fn open_in_editor(file_path: String) -> Result<(), String> {
         return Err(format!("File not found: {}", file_path));
     }
 
-    // Try editors in order: cursor, code (VS Code), then system default
+    // Try editors in order: cursor, code (VS Code), zed
     let editors = ["cursor", "code", "zed"];
     for editor in editors {
-        if tokio::process::Command::new("which")
+        if create_command(which_command())
             .arg(editor)
             .output()
             .await
             .map(|o| o.status.success())
             .unwrap_or(false)
         {
-            return tokio::process::Command::new(editor)
+            return create_command(editor)
                 .arg(&file_path)
                 .spawn()
                 .map(|_| ())
@@ -89,12 +90,30 @@ pub async fn open_in_editor(file_path: String) -> Result<(), String> {
         }
     }
 
-    // Fallback: macOS `open` command
-    tokio::process::Command::new("open")
-        .arg(&file_path)
-        .spawn()
-        .map(|_| ())
-        .map_err(|e| format!("Failed to open file: {}", e))
+    // Fallback: system default opener
+    #[cfg(target_os = "windows")]
+    let opener = "cmd";
+    #[cfg(target_os = "macos")]
+    let opener = "open";
+    #[cfg(target_os = "linux")]
+    let opener = "xdg-open";
+
+    #[cfg(target_os = "windows")]
+    {
+        create_command(opener)
+            .args(["/c", "start", "", &file_path])
+            .spawn()
+            .map(|_| ())
+            .map_err(|e| format!("Failed to open file: {}", e))
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        create_command(opener)
+            .arg(&file_path)
+            .spawn()
+            .map(|_| ())
+            .map_err(|e| format!("Failed to open file: {}", e))
+    }
 }
 
 /// Returns metadata for a single file as a FileNode (name, path, size, modified, extension).
