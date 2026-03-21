@@ -21,12 +21,14 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 /**
  * Inline update checker for the settings page.
  * Checks GitHub releases for new versions, downloads and installs updates.
+ * Shows release notes (body) from GitHub Release when an update is available.
  */
 export function UpdateChecker() {
   const { t } = useTranslation()
   const [status, setStatus] = useState<UpdateStatus>("idle")
   const [progress, setProgress] = useState<number>(0)
   const [newVersion, setNewVersion] = useState<string>("")
+  const [releaseNotes, setReleaseNotes] = useState<string>("")
   const updateRef = useRef<Update | null>(null)
   const progressRef = useRef(0)
 
@@ -43,9 +45,9 @@ export function UpdateChecker() {
 
       updateRef.current = update
       setNewVersion(update.version)
+      setReleaseNotes(update.body ?? "")
       setStatus("available")
     } catch {
-      // No release published yet, network error, or timeout
       setStatus("upToDate")
     }
   }
@@ -69,7 +71,6 @@ export function UpdateChecker() {
           downloadedBytes += event.data.chunkLength
           if (totalBytes > 0) {
             const pct = Math.round((downloadedBytes / totalBytes) * 100)
-            // Only re-render when percentage actually changes
             if (pct !== progressRef.current) {
               progressRef.current = pct
               setProgress(pct)
@@ -95,50 +96,63 @@ export function UpdateChecker() {
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm font-medium">{t("updater.title")}</p>
-        <p className="text-xs text-muted-foreground">
-          {status === "checking" && t("updater.checking")}
-          {status === "upToDate" && t("updater.upToDate")}
-          {status === "available" && t("updater.available", { version: newVersion })}
-          {status === "downloading" && t("updater.downloading", { progress })}
-          {status === "ready" && t("updater.ready")}
-          {status === "error" && t("updater.error")}
-          {status === "idle" && t("updater.description")}
-        </p>
+    <div className="flex flex-col gap-3">
+      {/* Header row: status text + action button */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium">{t("updater.title")}</p>
+          <p className="text-xs text-muted-foreground">
+            {status === "checking" && t("updater.checking")}
+            {status === "upToDate" && t("updater.upToDate")}
+            {status === "available" && t("updater.available", { version: newVersion })}
+            {status === "downloading" && t("updater.downloading", { progress })}
+            {status === "ready" && t("updater.ready")}
+            {status === "error" && t("updater.error")}
+            {status === "idle" && t("updater.description")}
+          </p>
+        </div>
+
+        {(status === "idle" || status === "error" || status === "upToDate") && (
+          <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5" onClick={handleCheckUpdate}>
+            <Download className="size-3.5" />
+            {t("updater.checkButton")}
+          </Button>
+        )}
+
+        {status === "checking" && (
+          <Loader2 className="size-4 animate-spin text-muted-foreground" />
+        )}
+
+        {status === "available" && (
+          <Button variant="default" size="sm" className="h-8 text-xs gap-1.5" onClick={handleDownloadAndInstall}>
+            <Download className="size-3.5" />
+            {t("updater.downloadButton")}
+          </Button>
+        )}
+
+        {status === "downloading" && (
+          <div className="flex items-center gap-2">
+            <Loader2 className="size-4 animate-spin" />
+            <span className="text-xs font-mono">{progress}%</span>
+          </div>
+        )}
+
+        {status === "ready" && (
+          <Button variant="default" size="sm" className="h-8 text-xs gap-1.5" onClick={handleRelaunch}>
+            <CheckCircle className="size-3.5" />
+            {t("updater.relaunchButton")}
+          </Button>
+        )}
       </div>
 
-      {(status === "idle" || status === "error" || status === "upToDate") && (
-        <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5" onClick={handleCheckUpdate}>
-          <Download className="size-3.5" />
-          {t("updater.checkButton")}
-        </Button>
-      )}
-
-      {status === "checking" && (
-        <Loader2 className="size-4 animate-spin text-muted-foreground" />
-      )}
-
-      {status === "available" && (
-        <Button variant="default" size="sm" className="h-8 text-xs gap-1.5" onClick={handleDownloadAndInstall}>
-          <Download className="size-3.5" />
-          {t("updater.downloadButton")}
-        </Button>
-      )}
-
-      {status === "downloading" && (
-        <div className="flex items-center gap-2">
-          <Loader2 className="size-4 animate-spin" />
-          <span className="text-xs font-mono">{progress}%</span>
+      {/* Release notes — shown when update is available, downloading, or ready */}
+      {releaseNotes && (status === "available" || status === "downloading" || status === "ready") && (
+        <div className="rounded-md border border-border bg-muted/50 p-3 max-h-48 overflow-y-auto">
+          <p className="text-xs font-medium mb-1.5">{t("updater.whatsNew")}</p>
+          <div className="text-xs text-muted-foreground whitespace-pre-wrap leading-relaxed">
+            {releaseNotes}
+          </div>
         </div>
-      )}
-
-      {status === "ready" && (
-        <Button variant="default" size="sm" className="h-8 text-xs gap-1.5" onClick={handleRelaunch}>
-          <CheckCircle className="size-3.5" />
-          {t("updater.relaunchButton")}
-        </Button>
       )}
     </div>
   )

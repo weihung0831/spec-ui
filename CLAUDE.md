@@ -26,7 +26,9 @@ src/                     # React 19 + TypeScript 前端
 ├── routes/              # TanStack Router 檔案式路由（index, editor, settings）
 ├── i18n/                # react-i18next 多語系（en.json, zh-TW.json）
 ├── types/               # TypeScript 型別定義
-└── styles/              # CSS（markdown-preview.css）
+├── lib/                 # 工具函式（utils.ts — cn() class merge helper）
+├── styles/              # CSS（markdown-preview.css）
+└── __tests__/           # Vitest 前端測試
 src-tauri/               # Rust 後端（Tauri 2）
 ├── src/commands/        # Tauri IPC 指令（file_operations, frontmatter, search, watcher, coverage, app_settings）
 ├── src/models/          # Rust 資料模型（file_node, frontmatter, coverage）
@@ -46,8 +48,11 @@ src-tauri/               # Rust 後端（Tauri 2）
 
 ## 注意事項
 
-- CSP 設定嚴格：`script-src 'self' 'wasm-unsafe-eval'` — 不允許 inline scripts
+- CSP 設定嚴格：`default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'` — 不允許 inline scripts
 - Tailwind v4 使用 `@tailwindcss/vite` plugin，非 PostCSS 方式
 - `npm run dev` 只啟動 Vite；需用 `npm run tauri dev` 才有完整 Rust 後端
 - Mermaid 圖表需要 CSP 中的 `'wasm-unsafe-eval'`
 - 檔案監控指令（start_watching/stop_watching）由 Tauri 端管理檔案系統事件
+- 版本同步：修改版本號時使用 `npm version <patch|minor|major>`，會自動透過 `scripts/sync-version.mjs` 同步至 `src-tauri/Cargo.toml` 和 `tauri.conf.json`
+- 測試環境：Vitest + jsdom + @testing-library/react，設定檔為 `src/test-setup.ts`
+- 自動更新：整合 `@tauri-apps/plugin-updater`，相關元件在 `src/components/updater/`

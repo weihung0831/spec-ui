@@ -106,7 +106,8 @@
     "downloading": "下載中... {{progress}}%",
     "ready": "更新已就緒，重新啟動以套用",
     "relaunchButton": "重新啟動",
-    "error": "檢查更新失敗"
+    "error": "檢查更新失敗",
+    "whatsNew": "更新內容"
   },
   "shortcuts": {
     "saveFile": "儲存檔案",

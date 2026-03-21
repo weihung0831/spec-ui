@@ -106,7 +106,8 @@
     "downloading": "Downloading... {{progress}}%",
     "ready": "Update ready — restart to apply",
     "relaunchButton": "Restart Now",
-    "error": "Failed to check for updates"
+    "error": "Failed to check for updates",
+    "whatsNew": "What's New"
   },
   "shortcuts": {
     "saveFile": "Save file",
