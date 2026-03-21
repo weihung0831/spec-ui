@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { check, type Update } from "@tauri-apps/plugin-updater"
+import { getLocalizedNotes } from "@/lib/localized-notes"
 
 export interface UpdateInfo {
   version: string
@@ -13,6 +15,7 @@ export interface UpdateInfo {
  * Silently swallows errors (network offline, timeout, etc.).
  */
 export function useAutoUpdateCheck() {
+  const { i18n } = useTranslation()
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null)
   const [dismissed, setDismissed] = useState(false)
 
@@ -25,7 +28,7 @@ export function useAutoUpdateCheck() {
         if (!cancelled && update) {
           setUpdateInfo({
             version: update.version,
-            body: update.body ?? "",
+            body: getLocalizedNotes(update.body ?? "", i18n.language),
             update,
           })
         }

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { getVersion } from "@tauri-apps/api/app"
 import { CheckCircle, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { getLocalizedNotes } from "@/lib/localized-notes"
 
 interface ChangelogData {
   version: string
@@ -11,17 +12,6 @@ interface ChangelogData {
 
 const VERSION_KEY = "last-known-version"
 const PENDING_KEY = "pending-changelog"
-
-/**
- * Extracts the localized section from release notes.
- * Format: English section first, then "---", then Chinese section.
- * Falls back to full text if no separator found.
- */
-function getLocalizedNotes(notes: string, lang: string): string {
-  const parts = notes.split(/\n---\n/)
-  if (parts.length < 2) return notes
-  return lang.startsWith("zh") ? parts[1].trim() : parts[0].trim()
-}
 
 /**
  * Dialog shown after app version changes (i.e. after an update).
