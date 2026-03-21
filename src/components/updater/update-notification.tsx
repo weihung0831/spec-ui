@@ -45,6 +45,11 @@ export function UpdateNotification({ info, onDismiss }: { info: UpdateInfo; onDi
 
   async function handleRelaunch() {
     try {
+      // Persist changelog so it can be shown after restart
+      localStorage.setItem("pending-changelog", JSON.stringify({
+        version: info.version,
+        body: info.body,
+      }))
       await relaunch()
     } catch {
       setStatus("error")

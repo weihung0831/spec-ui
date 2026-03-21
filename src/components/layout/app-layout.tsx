@@ -6,6 +6,7 @@ import { useWorkspacePersistence } from "@/hooks/use-workspace-persistence"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { useAutoUpdateCheck } from "@/hooks/use-auto-update-check"
 import { UpdateNotification } from "@/components/updater/update-notification"
+import { PostUpdateChangelog } from "@/components/updater/post-update-changelog"
 
 const COLLAPSED_WIDTH = 40
 
@@ -47,6 +48,9 @@ export function AppLayout() {
 
       {/* Auto update notification */}
       {updateInfo && <UpdateNotification info={updateInfo} onDismiss={dismiss} />}
+
+      {/* Post-update changelog dialog */}
+      <PostUpdateChangelog />
     </div>
     </TooltipProvider>
   )

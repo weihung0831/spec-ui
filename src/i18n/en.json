@@ -107,7 +107,9 @@
     "ready": "Update ready — restart to apply",
     "relaunchButton": "Restart Now",
     "error": "Failed to check for updates",
-    "whatsNew": "What's New"
+    "whatsNew": "What's New",
+    "justUpdated": "Updated to v{{version}}",
+    "gotIt": "Got it"
   },
   "shortcuts": {
     "saveFile": "Save file",
