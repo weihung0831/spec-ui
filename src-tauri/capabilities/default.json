@@ -15,6 +15,13 @@
     "fs:allow-home-write-recursive",
     "fs:allow-document-read-recursive",
     "fs:allow-document-write-recursive",
+    "core:window:allow-inner-size",
+    "core:window:allow-outer-position",
+    "core:window:allow-set-size",
+    "core:window:allow-set-position",
+    "core:window:allow-set-always-on-top",
+    "core:window:allow-scale-factor",
+    "core:window:allow-current-monitor",
     "updater:default",
     "process:default"
   ]

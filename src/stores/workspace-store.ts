@@ -16,6 +16,8 @@ interface WorkspaceState {
   selectedFilePath: string | null
   sidebarWidth: number
   sidebarCollapsed: boolean
+  isCompactWindow: boolean
+  isPinned: boolean
 
   // Existing actions
   setProjects: (projects: ProjectInfo[]) => void
@@ -29,6 +31,8 @@ interface WorkspaceState {
   selectFile: (path: string | null) => void
   setSidebarWidth: (width: number) => void
   setSidebarCollapsed: (collapsed: boolean) => void
+  setCompactWindow: (v: boolean) => void
+  setPinned: (v: boolean) => void
 }
 
 /** Simple hash function for generating stable IDs from paths */
@@ -56,6 +60,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   selectedFilePath: null,
   sidebarWidth: 280,
   sidebarCollapsed: false,
+  isCompactWindow: false,
+  isPinned: false,
 
   setProjects: (projects) => set({ projects }),
   setActiveProject: (projectId) => set({ activeProjectId: projectId }),
@@ -103,4 +109,6 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   setSidebarWidth: (width: number) => set({ sidebarWidth: width }),
 
   setSidebarCollapsed: (collapsed: boolean) => set({ sidebarCollapsed: collapsed }),
+  setCompactWindow: (v: boolean) => set({ isCompactWindow: v }),
+  setPinned: (v: boolean) => set({ isPinned: v }),
 }))
