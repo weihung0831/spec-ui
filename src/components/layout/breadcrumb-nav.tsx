@@ -8,6 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { useWorkspaceStore } from "@/stores/workspace-store"
+import { useSpecAnalyzerStore } from "@/stores/spec-analyzer-store"
 
 interface BreadcrumbNavProps {
   filePath: string | null
@@ -20,8 +21,11 @@ interface BreadcrumbNavProps {
 export function BreadcrumbNav({ filePath }: BreadcrumbNavProps) {
   const projects = useWorkspaceStore((s) => s.projects)
   const activeProjectId = useWorkspaceStore((s) => s.activeProjectId)
+  const report = useSpecAnalyzerStore((s) => s.report)
 
   if (!filePath) return null
+  // Hide breadcrumb when viewing analysis results
+  if (report?.specFile === filePath) return null
 
   const activeProject = projects.find((p) => p.id === activeProjectId)
   if (!activeProject) return null

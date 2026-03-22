@@ -5,6 +5,11 @@ import { routeTree } from "./routeTree.gen"
 import "./i18n"
 import "./index.css"
 
+// Disable default browser context menu globally
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault()
+})
+
 const router = createRouter({ routeTree })
 
 declare module "@tanstack/react-router" {

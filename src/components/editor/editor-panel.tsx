@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { useEditorStore } from "@/stores/editor-store"
 import { useFileOperations } from "@/hooks/use-file-operations"
 import { useAutoSave } from "@/hooks/use-auto-save"
@@ -11,7 +12,9 @@ import { BreadcrumbNav } from "@/components/layout/breadcrumb-nav"
 import type { Frontmatter } from "@/types/file-types"
 import { loadCachedReport } from "@/hooks/use-coverage-cache"
 import { useCoverageStore } from "@/stores/coverage-store"
-import { useWorkspaceStore } from "@/stores/workspace-store"
+import { useSpecAnalyzerStore } from "@/stores/spec-analyzer-store"
+import { useActiveProject } from "@/hooks/use-active-project"
+import { loadCachedAnalysis } from "@/hooks/use-spec-analyzer-cache"
 
 interface EditorPanelProps {
   filePath: string
@@ -29,9 +32,17 @@ export function EditorPanel({ filePath, isDark = false }: EditorPanelProps) {
   const getContent = useEditorStore((s) => s.getContent)
   const content = useEditorStore((s) => s.getContent(filePath)) ?? ""
   const setLastCodePath = useCoverageStore((s) => s.setLastCodePath)
-  const activeProjectId = useWorkspaceStore((s) => s.activeProjectId)
-  const projects = useWorkspaceStore((s) => s.projects)
-  const activeProject = projects.find((p) => p.id === activeProjectId)
+  const activeProject = useActiveProject()
+  const clearAnalysis = useSpecAnalyzerStore((s) => s.clearReport)
+  const { i18n } = useTranslation()
+
+  // When switching files or locale: reload analysis from cache
+  useEffect(() => {
+    clearAnalysis()
+    if (activeProject?.path) {
+      loadCachedAnalysis(filePath, activeProject.path, i18n.language)
+    }
+  }, [filePath, clearAnalysis, activeProject?.path, i18n.language])
 
   // Load file content when filePath changes
   useEffect(() => {
@@ -54,10 +65,11 @@ export function EditorPanel({ filePath, isDark = false }: EditorPanelProps) {
     console.debug("[editor-panel] loading cache for", filePath, "from", codePath)
     setLastCodePath(codePath)
     loadCachedReport(filePath, codePath).then((found) => {
-      console.debug("[editor-panel] cache loaded:", found)
+      console.debug("[editor-panel] coverage cache loaded:", found)
     }).catch((err) =>
-      console.warn("[editor-panel] cache load failed:", err)
+      console.warn("[editor-panel] coverage cache load failed:", err)
     )
+    // Spec analysis cache is NOT auto-loaded; user must click "Analyze Spec"
   }, [filePath, activeProject?.path, setLastCodePath])
 
   // Parse frontmatter from content (regex — no IPC needed for display)
@@ -94,6 +106,7 @@ export function EditorPanel({ filePath, isDark = false }: EditorPanelProps) {
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
+
       <FileTabBar />
       <BreadcrumbNav filePath={filePath} />
       <EditorToolbar filePath={filePath} onSave={handleSave} />

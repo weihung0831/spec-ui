@@ -46,6 +46,9 @@ const searchFiles = (
   caseSensitive,
 })
 
+const deleteFile = (filePath: string): Promise<void> =>
+  invoke<void>("delete_file", { filePath })
+
 const startWatching = (dirPath: string): Promise<void> =>
   invoke<void>("start_watching", { dirPath })
 
@@ -69,6 +72,7 @@ const fileOps = {
   readAppSettings,
   writeAppSettings,
   searchFiles,
+  deleteFile,
   startWatching,
   stopWatching,
   checkClaudeCli,

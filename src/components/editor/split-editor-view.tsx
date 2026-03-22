@@ -1,8 +1,10 @@
 import { useRef, useCallback, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useEditorStore } from "@/stores/editor-store"
+import { useSpecAnalyzerStore } from "@/stores/spec-analyzer-store"
 import { CodeMirrorEditor } from "@/components/editor/code-mirror-editor"
 import { PreviewPanel } from "@/components/preview/preview-panel"
+import { AnalyzerResultsPanel } from "@/components/spec-analyzer/analyzer-results-panel"
 
 interface SplitEditorViewProps {
   filePath: string
@@ -16,6 +18,7 @@ export function SplitEditorView({ filePath, isDark = false }: SplitEditorViewPro
   const content = useEditorStore((s) => s.openFiles[filePath]?.content ?? "")
   const updateContent = useEditorStore((s) => s.updateContent)
   const previewMode = useEditorStore((s) => s.previewMode)
+  const analysisReport = useSpecAnalyzerStore((s) => s.report)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [splitRatio, setSplitRatio] = useState(0.5)
@@ -89,7 +92,13 @@ export function SplitEditorView({ filePath, isDark = false }: SplitEditorViewPro
 
       {showPreview && (
         <div style={{ width: previewWidth }} className="h-full overflow-hidden min-w-0 border-l border-border">
-          <PreviewPanel content={content} />
+          {analysisReport ? (
+            <div className="h-full overflow-y-auto">
+              <AnalyzerResultsPanel />
+            </div>
+          ) : (
+            <PreviewPanel content={content} />
+          )}
         </div>
       )}
     </div>

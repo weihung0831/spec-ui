@@ -3,9 +3,10 @@ import { listen } from "@tauri-apps/api/event"
 
 export type FileChangeKind = "create" | "modify" | "remove" | "unknown"
 
+/** Matches the Rust struct with #[serde(rename_all = "camelCase")] */
 export interface FileChangedPayload {
   path: string
-  kind: FileChangeKind
+  eventType: FileChangeKind
 }
 
 interface UseFileWatcherOptions {
@@ -36,11 +37,11 @@ export function useFileWatcher(options: UseFileWatcherOptions = {}) {
           if (debounceRef.current) clearTimeout(debounceRef.current)
 
           debounceRef.current = setTimeout(() => {
-            if (payload.kind === "modify") {
+            if (payload.eventType === "modify") {
               console.log("[file-watcher] file modified:", payload.path)
               onModify?.(payload)
-            } else if (payload.kind === "create" || payload.kind === "remove") {
-              console.log("[file-watcher] file created/removed:", payload.path, payload.kind)
+            } else if (payload.eventType === "create" || payload.eventType === "remove") {
+              console.log("[file-watcher] file created/removed:", payload.path, payload.eventType)
               onCreateOrDelete?.(payload)
             }
           }, 500)

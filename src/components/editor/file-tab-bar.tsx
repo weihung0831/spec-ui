@@ -1,5 +1,8 @@
 import { useRef } from "react"
 import { useEditorStore } from "@/stores/editor-store"
+import { useSpecAnalyzerStore } from "@/stores/spec-analyzer-store"
+import { useWorkspaceStore } from "@/stores/workspace-store"
+import { closeTabAndSelect } from "@/hooks/use-close-tab-and-select"
 import { FileTab } from "@/components/editor/file-tab"
 
 /**
@@ -9,19 +12,20 @@ import { FileTab } from "@/components/editor/file-tab"
 export function FileTabBar() {
   const openTabs = useEditorStore((s) => s.openTabs)
   const activeFileId = useEditorStore((s) => s.activeFileId)
-  const closeTab = useEditorStore((s) => s.closeTab)
   const openFiles = useEditorStore((s) => s.openFiles)
   const openFile = useEditorStore((s) => s.openFile)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const analyzerReport = useSpecAnalyzerStore((s) => s.report)
 
   if (openTabs.length === 0) return null
 
   const handleTabClick = (path: string) => {
     const fileState = openFiles[path]
     if (fileState) {
-      // Re-activate by setting activeFileId via openFile (keeps content)
       openFile(path, fileState.content)
     }
+    useWorkspaceStore.getState().selectFile(path)
   }
 
   const isUnsaved = (path: string) => {
@@ -38,16 +42,19 @@ export function FileTabBar() {
       role="tablist"
       aria-label="Open files"
     >
-      {openTabs.map((path) => (
+      {openTabs.map((path) => {
+        const tabLabel = (analyzerReport?.specFile === path && analyzerReport?.specTitle) ? analyzerReport.specTitle : undefined
+        return (
         <FileTab
           key={path}
           filePath={path}
+          label={tabLabel}
           isActive={path === activeFileId}
           isUnsaved={isUnsaved(path)}
           onClick={() => handleTabClick(path)}
-          onClose={() => closeTab(path)}
+          onClose={() => closeTabAndSelect(path)}
         />
-      ))}
+      )})}
     </div>
   )
 }

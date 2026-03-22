@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils"
 
 interface FileTabProps {
   filePath: string
+  /** Override display label (e.g. analysis title) */
+  label?: string
   isActive: boolean
   isUnsaved: boolean
   onClick: () => void
@@ -13,8 +15,8 @@ interface FileTabProps {
  * Single tab showing file name, unsaved dot, and close button.
  * Supports middle-click to close.
  */
-export function FileTab({ filePath, isActive, isUnsaved, onClick, onClose }: FileTabProps) {
-  const fileName = filePath.split("/").pop() ?? filePath
+export function FileTab({ filePath, label, isActive, isUnsaved, onClick, onClose }: FileTabProps) {
+  const fileName = label || (filePath.split("/").pop() ?? filePath)
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // Middle-click closes tab

@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useEditorStore, type PreviewMode } from "@/stores/editor-store"
+import { useSpecAnalyzerStore } from "@/stores/spec-analyzer-store"
 import { ScanCoverageButton } from "@/components/coverage/scan-coverage-button"
+import { AnalyzeSpecButton } from "@/components/spec-analyzer/analyze-spec-button"
 import { cn } from "@/lib/utils"
 
 interface EditorToolbarProps {
@@ -20,8 +22,10 @@ export function EditorToolbar({ filePath, onSave }: EditorToolbarProps) {
   const previewMode = useEditorStore((s) => s.previewMode)
   const setPreviewMode = useEditorStore((s) => s.setPreviewMode)
   const isUnsaved = useEditorStore((s) => s.isUnsaved(filePath))
+  const hasAnalysis = useSpecAnalyzerStore((s) => !!s.report)
 
-  const fileName = filePath.split("/").pop() ?? filePath
+  const analysisTitle = useSpecAnalyzerStore((s) => s.report?.specTitle)
+  const fileName = analysisTitle || (filePath.split("/").pop() ?? filePath)
 
   const modeButtons: { mode: PreviewMode; icon: React.ReactNode; labelKey: string }[] = [
     { mode: "editor-only", icon: <AlignLeft className="size-4" />, labelKey: "editor.editorOnly" },
@@ -60,29 +64,34 @@ export function EditorToolbar({ filePath, onSave }: EditorToolbarProps) {
       </Tooltip>
 
       <ScanCoverageButton filePath={filePath} />
+      <AnalyzeSpecButton filePath={filePath} />
 
-      <Separator orientation="vertical" className="h-4" />
+      {/* Preview mode toggles — hidden when analysis panel is active */}
+      {!hasAnalysis && (
+        <>
+          <Separator orientation="vertical" className="h-4" />
+          <div className="flex items-center gap-0.5">
+            {modeButtons.map(({ mode, icon, labelKey }) => (
+              <Tooltip key={mode}>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={previewMode === mode ? "secondary" : "ghost"}
+                    size="sm"
+                    onClick={() => setPreviewMode(mode)}
+                    className="h-7 w-7 p-0"
+                    aria-label={t(labelKey)}
+                    aria-pressed={previewMode === mode}
+                  >
+                    {icon}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{t(labelKey)}</TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </>
+      )}
 
-      {/* Preview mode toggles */}
-      <div className="flex items-center gap-0.5">
-        {modeButtons.map(({ mode, icon, labelKey }) => (
-          <Tooltip key={mode}>
-            <TooltipTrigger asChild>
-              <Button
-                variant={previewMode === mode ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => setPreviewMode(mode)}
-                className="h-7 w-7 p-0"
-                aria-label={t(labelKey)}
-                aria-pressed={previewMode === mode}
-              >
-                {icon}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t(labelKey)}</TooltipContent>
-          </Tooltip>
-        ))}
-      </div>
     </div>
   )
 }
