@@ -26,6 +26,7 @@ pub fn run() {
             commands::file_operations::list_directory,
             commands::file_operations::get_file_metadata,
             commands::file_operations::open_in_editor,
+            commands::file_operations::delete_file,
             commands::frontmatter::parse_frontmatter,
             commands::frontmatter::update_frontmatter,
             commands::app_settings::read_app_settings,
@@ -40,6 +41,11 @@ pub fn run() {
             commands::coverage::write_coverage_cache,
             commands::coverage::get_changed_files,
             commands::coverage::save_coverage_override,
+            commands::spec_analyzer::analyze_spec,
+            commands::spec_analyzer::translate_analysis,
+            commands::spec_analyzer::read_analysis_cache,
+            commands::spec_analyzer::write_analysis_cache,
+            commands::spec_analyzer::export_analysis_markdown,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

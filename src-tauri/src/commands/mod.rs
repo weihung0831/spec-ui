@@ -3,4 +3,5 @@ pub mod coverage;
 pub mod file_operations;
 pub mod frontmatter;
 pub mod search;
+pub mod spec_analyzer;
 pub mod watcher;
