@@ -116,6 +116,24 @@ pub async fn open_in_editor(file_path: String) -> Result<(), String> {
     }
 }
 
+/// Permanently deletes a file or directory. Directories are deleted recursively.
+#[tauri::command]
+pub async fn delete_file(file_path: String) -> Result<(), String> {
+    // Canonicalize to prevent directory traversal (also verifies existence)
+    let canonical = std::fs::canonicalize(Path::new(&file_path))
+        .map_err(|e| format!("Invalid path: {}", e))?;
+
+    if canonical.is_dir() {
+        tokio::fs::remove_dir_all(&canonical)
+            .await
+            .map_err(|e| format!("Failed to delete directory: {}", e))
+    } else {
+        tokio::fs::remove_file(&canonical)
+            .await
+            .map_err(|e| format!("Failed to delete file: {}", e))
+    }
+}
+
 /// Returns metadata for a single file as a FileNode (name, path, size, modified, extension).
 #[tauri::command]
 pub async fn get_file_metadata(file_path: String) -> Result<FileNode, String> {
