@@ -51,6 +51,18 @@ A desktop app for authoring and managing markdown specification and plan files, 
 - Coverage summary with progress bar in frontmatter header
   前置資料標頭中的覆蓋率摘要與進度條
 
+### Spec Analyzer / 規格分析器
+- One-click spec analysis extracting DO/DON'T checklists and verification criteria
+  一鍵規格分析，萃取 DO/DON'T 清單與驗證指標
+- Collapsible results panel with summary bar, DO/DON'T sections, and verification table
+  可收合的結果面板，含摘要列、DO/DON'T 區段與驗證表格
+- Bilingual analysis with auto-translation support (EN ↔ 中)
+  雙語分析，支援自動翻譯（EN ↔ 中）
+- Analysis history and cache persistence per project
+  逐專案的分析歷史與快取持久化
+- Export analysis results to Markdown
+  匯出分析結果為 Markdown
+
 ### Progress Tracking / 進度追蹤
 - Checkbox-based progress tracking with visual progress bar
   基於勾選框的進度追蹤，含視覺化進度條
@@ -96,7 +108,7 @@ A desktop app for authoring and managing markdown specification and plan files, 
 - Node.js >= 18
 - Rust (stable) — install via [rustup](https://rustup.rs) / 透過 rustup 安裝
 - Tauri CLI prerequisites — see [Tauri docs](https://tauri.app/start/prerequisites/) / 參見 Tauri 文件
-- Claude CLI (optional, for coverage analysis) — install from [claude.ai/code](https://claude.ai/code) / 選用，用於覆蓋率分析
+- Claude CLI (optional, for coverage analysis & spec analyzer) — install from [claude.ai/code](https://claude.ai/code) / 選用，用於覆蓋率分析與規格分析器
 
 ### Setup & Run / 安裝與執行
 
