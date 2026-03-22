@@ -5,7 +5,9 @@
     "fileTree": "檔案樹",
     "refreshFileTree": "重新整理檔案樹",
     "expandSidebar": "展開側邊欄",
-    "collapseSidebar": "收合側邊欄"
+    "collapseSidebar": "收合側邊欄",
+    "compactWindow": "精簡模式",
+    "pinWindow": "釘選視窗"
   },
   "fileTree": {
     "addProject": "+ 新增專案",
@@ -20,7 +22,9 @@
     "showInFinder": "在 Finder 中顯示",
     "open": "開啟",
     "copyPath": "複製路徑",
-    "delete": "刪除"
+    "delete": "刪除",
+    "confirmDelete": "確定要刪除「{{name}}」嗎？此操作無法復原。",
+    "cancel": "取消"
   },
   "editor": {
     "selectFile": "從側邊欄選擇檔案以在此檢視。",
@@ -110,6 +114,53 @@
     "whatsNew": "更新內容",
     "justUpdated": "已更新至 v{{version}}",
     "gotIt": "知道了"
+  },
+  "specAnalyzer": {
+    "analyzeSpec": "分析規格",
+    "analyzing": "分析中...",
+    "analyzingSpec": "正在分析規格...",
+    "analyzeTooltip": "分析規格",
+    "specAnalysis": "規格分析",
+    "lastAnalyzed": "上次分析：{{time}}",
+    "noResults": "尚無分析結果。點擊「分析規格」開始。",
+    "doSection": "DO（要做）",
+    "dontSection": "DON'T（不做）",
+    "verificationSection": "驗證指標（測試案例）",
+    "summarySection": "摘要",
+    "category": {
+      "dataLayer": "資料層",
+      "backendLogic": "後端邏輯",
+      "apiRoutes": "API 路由",
+      "frontend": "前端",
+      "integration": "整合與修改",
+      "other": "其他",
+      "excluded": "明確排除",
+      "constraints": "約束與限制",
+      "antiPatterns": "反模式"
+    },
+    "doCount": "{{count}} 個要做項目",
+    "dontCount": "{{count}} 個不做項目",
+    "testCount": "{{count}} 個測試案例",
+    "sourceSection": "來源：{{section}}",
+    "riskAreas": "風險區域",
+    "suggestedOrder": "建議實作順序",
+    "unresolvedItems": "未解決項目",
+    "noRiskAreas": "未發現風險區域",
+    "noUnresolved": "無未解決項目",
+    "exportAnalysis": "匯出為 Markdown",
+    "exportSuccess": "分析已成功匯出",
+    "exportFailed": "匯出分析失敗",
+    "deleteCacheTitle": "刪除分析紀錄",
+    "deleteCacheDescription": "確定要刪除此分析紀錄嗎？",
+    "deleteCacheConfirm": "刪除紀錄",
+    "translating": "翻譯中...",
+    "translate": "翻譯",
+    "tableScenario": "情境",
+    "tableExpected": "預期結果",
+    "tablePriority": "優先級"
+  },
+  "common": {
+    "loading": "載入中..."
   },
   "shortcuts": {
     "saveFile": "儲存檔案",

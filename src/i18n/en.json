@@ -5,7 +5,9 @@
     "fileTree": "File tree",
     "refreshFileTree": "Refresh file tree",
     "expandSidebar": "Expand sidebar",
-    "collapseSidebar": "Collapse sidebar"
+    "collapseSidebar": "Collapse sidebar",
+    "compactWindow": "Compact mode",
+    "pinWindow": "Pin window"
   },
   "fileTree": {
     "addProject": "+ Add Project",
@@ -20,7 +22,9 @@
     "showInFinder": "Show in Finder",
     "open": "Open",
     "copyPath": "Copy Path",
-    "delete": "Delete"
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    "cancel": "Cancel"
   },
   "editor": {
     "selectFile": "Select a file from the sidebar to view it here.",
@@ -110,6 +114,53 @@
     "whatsNew": "What's New",
     "justUpdated": "Updated to v{{version}}",
     "gotIt": "Got it"
+  },
+  "specAnalyzer": {
+    "analyzeSpec": "Analyze Spec",
+    "analyzing": "Analyzing...",
+    "analyzingSpec": "Analyzing spec...",
+    "analyzeTooltip": "Analyze spec",
+    "specAnalysis": "Spec Analysis",
+    "lastAnalyzed": "Last analyzed: {{time}}",
+    "noResults": "No analysis results yet. Click \"Analyze Spec\" to start.",
+    "doSection": "DO",
+    "dontSection": "DON'T",
+    "verificationSection": "Verification Metrics",
+    "summarySection": "Summary",
+    "category": {
+      "dataLayer": "Data Layer",
+      "backendLogic": "Backend Logic",
+      "apiRoutes": "API Routes",
+      "frontend": "Frontend",
+      "integration": "Integration",
+      "other": "Other",
+      "excluded": "Explicitly Excluded",
+      "constraints": "Constraints & Limitations",
+      "antiPatterns": "Anti-Patterns"
+    },
+    "doCount": "{{count}} DO items",
+    "dontCount": "{{count}} DON'T items",
+    "testCount": "{{count}} test cases",
+    "sourceSection": "Source: {{section}}",
+    "riskAreas": "Risk Areas",
+    "suggestedOrder": "Suggested Order",
+    "unresolvedItems": "Unresolved",
+    "noRiskAreas": "No risk areas identified",
+    "noUnresolved": "No unresolved items",
+    "exportAnalysis": "Export as Markdown",
+    "exportSuccess": "Analysis exported successfully",
+    "exportFailed": "Failed to export analysis",
+    "deleteCacheTitle": "Delete Analysis Record",
+    "deleteCacheDescription": "Are you sure you want to remove this analysis record?",
+    "deleteCacheConfirm": "Delete Record",
+    "translating": "Translating...",
+    "translate": "Translate",
+    "tableScenario": "Scenario",
+    "tableExpected": "Expected",
+    "tablePriority": "Pri"
+  },
+  "common": {
+    "loading": "Loading..."
   },
   "shortcuts": {
     "saveFile": "Save file",
