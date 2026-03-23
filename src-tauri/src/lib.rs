@@ -11,24 +11,6 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
         .setup(|app| {
-            // Fix PATH for macOS GUI apps launched from Finder/Dock.
-            // GUI apps don't inherit the user's shell PATH, so tools like
-            // `claude` installed via npm/homebrew won't be found.
-            #[cfg(not(target_os = "windows"))]
-            {
-                if let Ok(output) = std::process::Command::new("sh")
-                    .args(["-lc", "echo $PATH"])
-                    .output()
-                {
-                    if output.status.success() {
-                        let shell_path = String::from_utf8_lossy(&output.stdout).trim().to_string();
-                        if !shell_path.is_empty() {
-                            std::env::set_var("PATH", &shell_path);
-                        }
-                    }
-                }
-            }
-
             if cfg!(debug_assertions) {
                 app.handle().plugin(
                     tauri_plugin_log::Builder::default()

@@ -10,7 +10,7 @@ use crate::models::coverage::{
     CodeMatch, CoverageCache, CoverageOverride, CoverageReport, CoverageResult,
     CoverageSummary, CoverageStatus, RequirementInfo,
 };
-use crate::process_utils::{create_command, which_command};
+use crate::process_utils::{create_command, resolve_claude_path};
 
 // ---------------------------------------------------------------------------
 // ClaudeCliInfo
@@ -30,27 +30,20 @@ pub struct ClaudeCliInfo {
 // ---------------------------------------------------------------------------
 
 /// Detects whether the `claude` CLI is installed and returns its path + version.
+/// Uses `resolve_claude_path()` which checks multiple strategies including the
+/// user's login shell and known install locations — critical for macOS GUI apps.
 #[tauri::command]
 pub async fn check_claude_cli() -> Result<ClaudeCliInfo, String> {
-    let which_cmd = which_command();
-
-    let which_output = create_command(which_cmd)
-        .arg("claude")
-        .output()
-        .await
-        .map_err(|e| format!("Failed to run {}: {}", which_cmd, e))?;
-
-    if !which_output.status.success() {
-        return Ok(ClaudeCliInfo {
-            available: false,
-            path: String::new(),
-            version: String::new(),
-        });
-    }
-
-    let path = String::from_utf8_lossy(&which_output.stdout)
-        .trim()
-        .to_string();
+    let path = match resolve_claude_path() {
+        Some(p) => p,
+        None => {
+            return Ok(ClaudeCliInfo {
+                available: false,
+                path: String::new(),
+                version: String::new(),
+            });
+        }
+    };
 
     // Attempt to get the version; non-fatal if this fails
     let version = match create_command("claude")
@@ -62,7 +55,6 @@ pub async fn check_claude_cli() -> Result<ClaudeCliInfo, String> {
             String::from_utf8_lossy(&out.stdout).trim().to_string()
         }
         Ok(out) => {
-            // Some CLIs print version on stderr
             let stderr = String::from_utf8_lossy(&out.stderr).trim().to_string();
             if stderr.is_empty() { String::new() } else { stderr }
         }

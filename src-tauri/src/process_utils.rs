@@ -1,16 +1,30 @@
 /// Cross-platform process spawning utilities.
 /// On Windows, sets `CREATE_NO_WINDOW` flag to prevent console window flashing
 /// when spawning background processes from a GUI application.
+/// On macOS, resolves CLI tools via the user's login shell since GUI apps
+/// launched from Finder/Dock don't inherit the terminal's PATH.
 
+use std::sync::OnceLock;
 use std::time::Duration;
 use tokio::time::timeout;
 
 #[cfg(target_os = "windows")]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
 
+/// Cached absolute path for the Claude CLI binary.
+static CLAUDE_PATH: OnceLock<Option<String>> = OnceLock::new();
+
 pub fn create_command(program: &str) -> tokio::process::Command {
+    // On macOS/Linux, resolve "claude" to its absolute path since GUI apps
+    // launched from Finder don't inherit the terminal's PATH.
+    let resolved = if program == "claude" {
+        resolve_claude_path().unwrap_or_else(|| program.to_string())
+    } else {
+        program.to_string()
+    };
+
     #[allow(unused_mut)]
-    let mut cmd = tokio::process::Command::new(program);
+    let mut cmd = tokio::process::Command::new(&resolved);
     #[cfg(target_os = "windows")]
     {
         use std::os::windows::process::CommandExt;
@@ -25,6 +39,65 @@ pub fn which_command() -> &'static str {
     { "where" }
     #[cfg(not(target_os = "windows"))]
     { "which" }
+}
+
+/// Resolves the absolute path of the Claude CLI binary.
+/// Tries multiple strategies: direct `which`, user's login shell, known paths.
+/// Result is cached after the first successful resolution.
+pub fn resolve_claude_path() -> Option<String> {
+    CLAUDE_PATH.get_or_init(|| {
+        // 1. Try direct `which` (works if PATH is already correct)
+        if let Some(p) = try_which_claude() {
+            return Some(p);
+        }
+        // 2. Try via user's login shell (sources .zshrc/.bash_profile)
+        if let Some(p) = try_shell_which_claude() {
+            return Some(p);
+        }
+        // 3. Check common install locations
+        let home = std::env::var("HOME").unwrap_or_default();
+        let candidates = [
+            format!("{}/.local/bin/claude", home),
+            format!("{}/.claude/bin/claude", home),
+            "/usr/local/bin/claude".to_string(),
+            format!("{}/.bun/bin/claude", home),
+            format!("{}/.cargo/bin/claude", home),
+        ];
+        for path in &candidates {
+            if std::path::Path::new(path).is_file() {
+                return Some(path.clone());
+            }
+        }
+        None
+    }).clone()
+}
+
+/// Try `which claude` using the current process PATH.
+fn try_which_claude() -> Option<String> {
+    let out = std::process::Command::new(which_command())
+        .arg("claude")
+        .output()
+        .ok()?;
+    if out.status.success() {
+        let p = String::from_utf8_lossy(&out.stdout).trim().to_string();
+        if !p.is_empty() { return Some(p); }
+    }
+    None
+}
+
+/// Try resolving claude via the user's login shell to get full PATH.
+fn try_shell_which_claude() -> Option<String> {
+    // Use the user's actual shell, fallback to /bin/zsh then /bin/sh
+    let shell = std::env::var("SHELL").unwrap_or_else(|_| "/bin/zsh".to_string());
+    let out = std::process::Command::new(&shell)
+        .args(["-lc", "which claude"])
+        .output()
+        .ok()?;
+    if out.status.success() {
+        let p = String::from_utf8_lossy(&out.stdout).trim().to_string();
+        if !p.is_empty() { return Some(p); }
+    }
+    None
 }
 
 /// Run Claude CLI with the given args, piping prompt via stdin.
