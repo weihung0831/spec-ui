@@ -21,4 +21,14 @@ writeFileSync(
   cargo.replace(/^version = "[^"]+"/m, `version = "${version}"`)
 )
 
-console.log(`Synced version ${version} to tauri.conf.json and Cargo.toml`)
+// Sync Cargo.lock (only the spec-plan-manager package version)
+const cargoLock = readFileSync("src-tauri/Cargo.lock", "utf8")
+writeFileSync(
+  "src-tauri/Cargo.lock",
+  cargoLock.replace(
+    /(name = "spec-plan-manager"\nversion = ")[^"]+"/,
+    `$1${version}"`
+  )
+)
+
+console.log(`Synced version ${version} to tauri.conf.json, Cargo.toml, and Cargo.lock`)
